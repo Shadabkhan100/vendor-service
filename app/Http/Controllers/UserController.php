@@ -27,7 +27,25 @@ class UserController extends Controller
         }
       
     }
+    public function login(Request $req){
+        try {
+            $credentials = $req->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
+            if (!auth()->attempt($credentials)) {
+                return response()->json(['message' => 'Invalid credentials'], 401);
+            }
+
+            $user = auth()->user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json(['message' => 'Login successful', 'access_token' => $token, 'token_type' => 'Bearer']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Login failed', 'error' => $e->getMessage()], 500);
+        }
+    }
     public function index()
     {
         return response()->json(User::all());
