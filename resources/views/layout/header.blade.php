@@ -19,8 +19,18 @@
                 </div>
                 <div class="col-lg-4 text-center text-lg-end">
                     <div class="d-inline-flex align-items-center" style="height: 45px;">
+                        @if(auth()->check())
+                       <small class="me-3 text-dark">
+        <i class="fa fa-user text-primary me-2"></i>
+        Welcome {{ auth()->user()->name }}
+    </small>
+
+ 
+    @else
                         <a href="#"><small class="me-3 text-dark"><i class="fa fa-user text-primary me-2"></i>Register</small></a>
-                        <a href="#"><small class="me-3 text-dark"><i class="fa fa-sign-in-alt text-primary me-2"></i>Login</small></a>
+                        <a href="/user-login-form"><small class="me-3 text-dark"><i class="fa fa-sign-in-alt text-primary me-2"></i>Login</small></a>
+                        @endif
+                       
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fa fa-home text-primary me-2"></i> My Dashboard</small></a>
                             <div class="dropdown-menu rounded">
@@ -31,6 +41,17 @@
                                 <a href="#" class="dropdown-item"><i class="fas fa-power-off me-2"></i> Log Out</a>
                             </div>
                         </div>
+
+                        @if(auth()->check())
+
+              <form method="POST" action="/logout" class="d-inline ms-3">
+    @csrf
+
+    <button type="submit" class="text-danger fw-bold text-decoration-none border-0 bg-transparent p-0">
+        <i class="fa fa-sign-out-alt me-1"></i> Logout
+    </button>
+</form>
+@endif
                     </div>
                 </div>
             </div>
@@ -49,7 +70,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="/" class="nav-item nav-link active">Home</a>
                         <a href="about.html" class="nav-item nav-link">About</a>
                         <a href="service.html" class="nav-item nav-link">Services</a>
                         <a href="blog.html" class="nav-item nav-link">Blogs</a>

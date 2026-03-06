@@ -6,49 +6,70 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+
 class UserController extends Controller
 {
-      public function register(Request $req){
+
+    public function register(Request $req)
+    {
         try {
             $validatedData = $req->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'userType' => 'required|string',
-            'isPremium' => 'required|boolean',
-        ]);
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-        $user = \App\Models\User::create($validatedData);
-        event(new \Illuminate\Auth\Events\Registered($user));
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);   
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Registration failed', 'error' => $e->getMessage()], 500);
-        }
-      
-    }
-    public function login(Request $req){
-        try {
-            $credentials = $req->validate([
-                'email' => 'required|string|email',
-                'password' => 'required|string',
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'userType' => 'required|string',
+                'isPremium' => 'required|boolean',
             ]);
-
-            if (!auth()->attempt($credentials)) {
-                return response()->json(['message' => 'Invalid credentials'], 401);
+            $validatedData['password'] = Hash::make($validatedData['password']);
+            $user = User::create($validatedData);
+            event(new Registered($user));
+            if ($user) {
+                auth()->login($user);
             }
-
-            $user = auth()->user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json(['message' => 'Login successful', 'access_token' => $token, 'token_type' => 'Bearer']);
+            return redirect('/')
+                ->with('success', 'User registered successfully');
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Login failed', 'error' => $e->getMessage()], 500);
+            return redirect('/')
+                ->with('error',  $e->getMessage());
         }
+    }
+
+
+    public function login(Request $req)
+    {
+        try {
+            $validated_data = $req->validate([
+                'email' => 'string|max:255',
+                'password' => 'min:6'
+            ]);
+            if (!auth()->attempt($validated_data)) {
+                return redirect('/')
+                    ->with('error', 'Invalid credentials');
+            } else {
+                $user = auth()->user();
+                $req->session()->regenerate();
+                // $token = $user->createToken('Auth_Token')->plainTextToken;
+
+                return redirect('/')
+                    ->with('success', 'Login successful');
+            }
+        } catch (\Exception $e) {
+            return redirect('/')
+                ->with('error', 'Invalid credentials');
+        }
+    }
+
+    public function logout(Request $req)
+    {
+        auth()->logout();
+        $req->session()->invalidate();
+        $req->session()->regenerateToken();
+        return redirect('/')
+            ->with('success', 'Logout successful');
     }
     public function index()
     {
         return response()->json(User::all());
     }
-
 }

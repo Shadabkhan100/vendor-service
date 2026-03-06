@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet"> 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -34,7 +34,55 @@
     <main>
         @yield('content')
     </main>
+<div class="modal fade" id="authModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
 
+            <h4 id="authModalTitle" class="mb-3"></h4>
+
+            <p id="authModalMessage"></p>
+
+            <button id="authModalBtn" class="btn btn-primary mt-3" data-bs-dismiss="modal">
+    OK
+</button>
+
+        </div>
+    </div>
+</div>
+@if(session('success') || session('error') || $errors->any())
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+    let title = document.getElementById("authModalTitle");
+    let message = document.getElementById("authModalMessage");
+    let button = document.getElementById("authModalBtn");
+    @if(session('success'))
+        title.innerHTML =
+        '<i class="fa fa-check-circle text-success"></i> Success';
+        message.innerText = "{{ session('success') }}";
+        button.className = "btn btn-success mt-3";
+    @elseif(session('error'))
+        title.innerHTML =
+        '<i class="fa fa-times-circle text-danger"></i> Error';
+        message.innerText = "{{ session('error') }}";
+        button.className = "btn btn-danger mt-3";
+    @elseif($errors->any())
+        title.innerHTML =
+        '<i class="fa fa-exclamation-triangle text-danger"></i> Validation Error';
+        message.innerText =
+        "@foreach($errors->all() as $error) {{ $error }} \n @endforeach";
+        button.className = "btn btn-danger mt-3";
+    @endif
+    let modal = new bootstrap.Modal(
+        document.getElementById("authModal")
+    );
+    modal.show();
+});
+
+</script>
+
+@endif
     @include('layout.footer')
 
 <script src="{{ asset('assets/lib/easing/easing.min.js') }}"></script>

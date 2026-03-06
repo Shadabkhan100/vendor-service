@@ -9,7 +9,7 @@ Route::get('/get-users', [UserController::class, 'index']);
 Route::get('/test', function () {
     return response()->json(['message' => 'API workingddfdfd']);
 });
-Route::post('/login', [UserController::class, 'login']);
+// Route::post('/login', [UserController::class, 'login']);
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
