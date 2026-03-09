@@ -105,4 +105,27 @@ class HomeController extends Controller
     {
         return view('auth.login');
     }
+
+    public function profile(Request $request)
+{
+    $user=auth()->user();
+   
+
+    if (!$user) {
+        return redirect('/user-login-form');
+    }
+
+    // Debug current session
+    // return response()->json([
+    //     'userType' =>  $user->userType,
+    //     'userName' => $user->name,
+    //     'all_session' => session()->all()
+    // ]);
+
+    return view('auth.profile', compact('user'));
+}
+    public function notFound()
+    {
+        return view('share.not_found');
+    }
 }

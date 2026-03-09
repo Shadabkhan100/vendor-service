@@ -9,3 +9,5 @@ Route::get('/user-login-form', [HomeController::class, 'loginForm']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
+Route::get('/profile', [HomeController::class, 'profile']);
+Route::get('/not-found', [HomeController::class, 'notFound']);

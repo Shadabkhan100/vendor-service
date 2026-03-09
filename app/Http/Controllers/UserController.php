@@ -50,7 +50,6 @@ class UserController extends Controller
                 $user = auth()->user();
                 $req->session()->regenerate();
                 // $token = $user->createToken('Auth_Token')->plainTextToken;
-
                 return redirect('/')
                     ->with('success', 'Login successful');
             }
