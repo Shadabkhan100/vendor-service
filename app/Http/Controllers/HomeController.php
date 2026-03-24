@@ -108,21 +108,72 @@ class HomeController extends Controller
 
     public function profile(Request $request)
 {
-    $user=auth()->user();
-   
+    $user = auth()->user();
 
     if (!$user) {
         return redirect('/user-login-form');
     }
 
-    // Debug current session
-    // return response()->json([
-    //     'userType' =>  $user->userType,
-    //     'userName' => $user->name,
-    //     'all_session' => session()->all()
-    // ]);
+    $services = [
+        [
+            'id' => 1,
+            'title' => 'Website Design',
+            'description' => 'Modern responsive website design',
+            'price' => 100,
+            'status' => 'approved',
+            'images' => [
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+            ]
+        ],
+        [
+            'id' => 2,
+            'title' => 'SEO Service',
+            'description' => 'Complete on-page and off-page SEO',
+            'price' => 50,
+            'status' => 'pending',
+            'images' => [
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+            ]
+        ],
+        [
+            'id' => 3,
+            'title' => 'Logo Design',
+            'description' => 'Creative logo with branding',
+            'price' => 30,
+            'status' => 'rejected',
+            'images' => [
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+            ]
+        ],
+        [
+            'id' => 4,
+            'title' => 'Mobile App UI',
+            'description' => 'UI/UX design for mobile apps',
+            'price' => 120,
+            'status' => 'approved',
+            'images' => [
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+                'https://via.placeholder.com/400x250',
+            ]
+        ],
+    ];
 
-    return view('auth.profile', compact('user'));
+    return view('auth.profile', compact('user', 'services'));
 }
     public function notFound()
     {

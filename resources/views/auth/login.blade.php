@@ -56,7 +56,15 @@
           <input type="email" name="email" placeholder="Email" class="auth-input" required>
           <br><br>
           <input type="password" name="password" placeholder="Password" class="auth-input" required>
-           <input style="display: none;" type="text" value="user" name="userType" placeholder="User Type" class="auth-input" >
+  <br><br>
+<select name="userType" class="auth-input" required>
+    <option value="" disabled selected>Select User Type</option>
+    <option value="user">User</option>
+    <option value="vendor">Vendor</option>
+    <option value="admin">Admin</option>
+</select>
+
+<input style="display: none;" type="number" value="0" name="isPremium" class="auth-input">
             <input style="display: none;" type="number" value="0" name="isPremium" placeholder="Is Premium" class="auth-input" >
           <br><br>
           <button class="auth-signup-button">Sign Up</button>
